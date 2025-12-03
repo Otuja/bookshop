@@ -1,14 +1,15 @@
+"use client";
+
 import { BookCard } from "@/components/ui/BookCard";
 import { ShoppingCart, Heart, Share2, Check } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { AddToCartButton } from "@/components/product/AddToCartButton";
-
-// This is a server component
 import { useBooks } from "@/context/BookContext";
 
-export default function ProductPage({ params }: { params: { id: string } }) {
+export default function ProductPage() {
+  const params = useParams();
   const { books } = useBooks();
   const book = books.find((b) => b.id === params.id);
 
