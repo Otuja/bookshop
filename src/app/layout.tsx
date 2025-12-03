@@ -18,6 +18,10 @@ export const metadata: Metadata = {
   title: "UNN Bookshop",
   description: "Official Bookshop of the University of Nigeria, Nsukka",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export const viewport: Viewport = {

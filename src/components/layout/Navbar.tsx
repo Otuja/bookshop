@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { Menu, X, ShoppingCart, User, ChevronRight } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Logo } from "@/components/ui/Logo";
@@ -22,7 +23,7 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 md:px-6">
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex items-center">
@@ -63,73 +64,113 @@ export function Navbar() {
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 hover:bg-accent rounded-md transition-colors"
+              className="p-2 hover:bg-accent rounded-full transition-colors relative z-[60]"
+              aria-label="Toggle Menu"
             >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              <AnimatePresence mode="wait">
+                {isOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ opacity: 0, rotate: -90 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: 90 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="h-6 w-6" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ opacity: 0, rotate: 90 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: -90 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="h-6 w-6" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-md md:hidden flex flex-col pt-24 px-6"
-          >
-            <div className="flex flex-col gap-6">
-              {navLinks.map((link, index) => (
+      {/* Mobile Menu Overlay - Rendered via Portal */}
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {isOpen && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[99] bg-background/80 backdrop-blur-sm md:hidden cursor-pointer"
+                onClick={() => setIsOpen(false)}
+              />
+              <motion.div
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                className="fixed inset-y-0 right-0 z-[100] w-3/4 max-w-sm bg-background border-l shadow-2xl md:hidden flex flex-col p-6 pt-24"
+              >
+                <div className="flex flex-col gap-2 flex-1">
+                  {navLinks.map((link, index) => (
+                    <motion.div
+                      key={link.href}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + index * 0.05 }}
+                    >
+                      <Link
+                        href={link.href}
+                        onClick={() => setIsOpen(false)}
+                        className={cn(
+                          "flex items-center justify-between text-lg font-medium py-4 px-4 rounded-xl transition-colors",
+                          pathname === link.href 
+                            ? "bg-primary/10 text-primary" 
+                            : "text-foreground hover:bg-accent"
+                        )}
+                      >
+                        {link.label}
+                        <ChevronRight className={cn(
+                          "h-5 w-5 transition-transform",
+                          pathname === link.href ? "text-primary translate-x-1" : "text-muted-foreground"
+                        )} />
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
+                
                 <motion.div
-                  key={link.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 + index * 0.05 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="flex flex-col gap-3 mt-auto pt-8 border-t"
                 >
                   <Link
-                    href={link.href}
+                    href="/cart"
                     onClick={() => setIsOpen(false)}
-                    className={cn(
-                      "flex items-center justify-between text-2xl font-serif font-medium py-2 border-b border-border/50",
-                      pathname === link.href ? "text-primary" : "text-foreground"
-                    )}
+                    className="flex items-center justify-center gap-2 bg-primary text-primary-foreground py-4 rounded-xl font-bold text-lg shadow-lg shadow-primary/20 active:scale-95 transition-all"
                   >
-                    {link.label}
-                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    <ShoppingCart className="h-5 w-5" />
+                    Cart ({totalItems})
+                  </Link>
+                  <Link
+                    href="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-center gap-2 bg-secondary text-secondary-foreground py-4 rounded-xl font-bold text-lg shadow-lg shadow-secondary/20 active:scale-95 transition-all"
+                  >
+                    <User className="h-5 w-5" />
+                    Login
                   </Link>
                 </motion.div>
-              ))}
-              
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
-                className="flex gap-4 mt-4"
-              >
-                <Link
-                  href="/cart"
-                  onClick={() => setIsOpen(false)}
-                  className="flex-1 flex items-center justify-center gap-2 bg-primary text-primary-foreground py-3 rounded-full font-medium"
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                  Cart ({totalItems})
-                </Link>
-                <Link
-                  href="/login"
-                  onClick={() => setIsOpen(false)}
-                  className="flex-1 flex items-center justify-center gap-2 bg-secondary text-secondary-foreground py-3 rounded-full font-medium"
-                >
-                  <User className="h-5 w-5" />
-                  Login
-                </Link>
               </motion.div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </nav>
   );
 }
