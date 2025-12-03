@@ -2,10 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 
 import { CartProvider } from "@/context/CartContext";
+import { BookProvider } from "@/context/BookContext";
 import { Toaster } from "@/components/ui/Toaster";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -46,10 +45,10 @@ export default function RootLayout({
         )}
       >
         <CartProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <Toaster />
+          <BookProvider>
+            {children}
+            <Toaster />
+          </BookProvider>
         </CartProvider>
       </body>
     </html>

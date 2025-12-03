@@ -29,7 +29,7 @@ export const books = [
     author: "N. Gregory Mankiw",
     price: 9000,
     category: "Economics",
-    image: "https://images.unsplash.com/photo-1611974765270-ca1258634369?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop",
   },
   {
     id: "5",

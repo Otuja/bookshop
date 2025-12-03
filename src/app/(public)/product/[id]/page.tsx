@@ -1,4 +1,3 @@
-import { books } from "@/lib/data";
 import { BookCard } from "@/components/ui/BookCard";
 import { ShoppingCart, Heart, Share2, Check } from "lucide-react";
 import Link from "next/link";
@@ -7,12 +6,22 @@ import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/product/AddToCartButton";
 
 // This is a server component
-export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const book = books.find((b) => b.id === id);
+import { useBooks } from "@/context/BookContext";
+
+export default function ProductPage({ params }: { params: { id: string } }) {
+  const { books } = useBooks();
+  const book = books.find((b) => b.id === params.id);
 
   if (!book) {
-    notFound();
+    return (
+      <div className="container mx-auto px-4 py-20 text-center">
+        <h1 className="text-2xl font-bold">Book not found</h1>
+        <p className="text-muted-foreground mt-2">The book you are looking for does not exist.</p>
+        <Link href="/shop" className="text-primary hover:underline mt-4 inline-block">
+          Back to Shop
+        </Link>
+      </div>
+    );
   }
 
   return (

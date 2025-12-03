@@ -2,12 +2,13 @@
 
 import { useState, Suspense } from "react";
 import { BookCard } from "@/components/ui/BookCard";
-import { books } from "@/lib/data";
 import { Filter, ChevronDown } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { SearchInput } from "@/components/ui/SearchInput";
+
+import { useBooks } from "@/context/BookContext";
 
 function ShopContent() {
   const searchParams = useSearchParams();
@@ -19,7 +20,8 @@ function ShopContent() {
     price: true
   });
 
-  const categories = ["All", "Computer Science", "Engineering", "Law", "Economics", "Medicine", "Arts"];
+  const { books, categories: contextCategories } = useBooks();
+  const categories = ["All", ...contextCategories];
 
   const toggleSection = (section: keyof typeof expandedSections) => {
     setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));

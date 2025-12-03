@@ -112,8 +112,17 @@ export function Navbar() {
                 animate={{ x: 0 }}
                 exit={{ x: "100%" }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="fixed inset-y-0 right-0 z-[100] w-3/4 max-w-sm bg-background border-l shadow-2xl md:hidden flex flex-col p-6 pt-24"
+                className="fixed inset-y-0 right-0 z-[100] w-3/4 max-w-sm bg-background border-l shadow-2xl md:hidden flex flex-col p-6 pt-6"
               >
+                <div className="flex justify-end mb-6">
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="p-2 hover:bg-accent rounded-full transition-colors"
+                    aria-label="Close Menu"
+                  >
+                    <X className="h-6 w-6" />
+                  </button>
+                </div>
                 <div className="flex flex-col gap-2 flex-1">
                   {navLinks.map((link, index) => (
                     <motion.div
