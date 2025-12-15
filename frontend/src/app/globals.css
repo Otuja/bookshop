@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius: var(--radius);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #0a2912; /* Deep Green-Black */
+
+  --card: #ffffff;
+  --card-foreground: #0a2912;
+
+  --popover: #ffffff;
+  --popover-foreground: #0a2912;
+
+  --primary: #0d4d1d; /* UNN Green */
+  --primary-foreground: #ffffff;
+
+  --secondary: #FFD700; /* Gold */
+  --secondary-foreground: #0d4d1d;
+
+  --muted: #f0fdf4;
+  --muted-foreground: #166534;
+
+  --accent: #f0fdf4;
+  --accent-foreground: #0d4d1d;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: #dcfce7;
+  --input: #dcfce7;
+  --ring: #0d4d1d;
+
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: #051a0a;
+  --foreground: #f0fdf4;
+
+  --card: #051a0a;
+  --card-foreground: #f0fdf4;
+
+  --popover: #051a0a;
+  --popover-foreground: #f0fdf4;
+
+  --primary: #0d4d1d;
+  --primary-foreground: #ffffff;
+
+  --secondary: #FFD700;
+  --secondary-foreground: #0d4d1d;
+
+  --muted: #0a2912;
+  --muted-foreground: #86efac;
+
+  --accent: #0a2912;
+  --accent-foreground: #f0fdf4;
+
+  --destructive: #7f1d1d;
+  --destructive-foreground: #ffffff;
+
+  --border: #14532d;
+  --input: #14532d;
+  --ring: #0d4d1d;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+* {
+  border-color: var(--border);
+}
+
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
