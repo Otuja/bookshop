@@ -11,7 +11,9 @@ import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/api";
 import { useToast } from "@/components/ui/use-toast";
 
-export default function LoginPage() {
+import { Suspense } from "react";
+
+function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -46,6 +48,87 @@ export default function LoginPage() {
   };
 
   return (
+    <div className="w-full max-w-md space-y-8 relative z-10">
+      <div className="text-center space-y-4">
+        <div className="relative w-20 h-20 mx-auto">
+           <Image src="/logo.png" alt="UNN Logo" fill className="object-contain" />
+        </div>
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
+          <p className="text-sm text-gray-500 font-medium">Sign in to your UNN Bookshop account</p>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-2">
+          <label className="text-xs font-bold text-gray-600 uppercase tracking-wide">
+            Email Address
+          </label>
+          <input
+            type="email"
+            placeholder="student@unn.edu.ng"
+            className="w-full px-4 py-3 bg-blue-50/50 border border-blue-100 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all placeholder:text-gray-400"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-xs font-bold text-gray-600 uppercase tracking-wide">
+            Password
+          </label>
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="••••••••••"
+              className="w-full px-4 py-3 bg-blue-50/50 border border-blue-100 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all placeholder:text-gray-400"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+          <div className="flex justify-end">
+            <Link href="#" className="text-xs font-bold text-gray-500 hover:text-green-700">
+              Forgot Password?
+            </Link>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-[#1B5E20] hover:bg-[#144a18] text-white font-bold py-3 rounded-lg transition-all transform active:scale-[0.98] flex items-center justify-center shadow-lg shadow-green-900/20"
+        >
+          {isLoading ? (
+            <Loader2 className="h-5 w-5 animate-spin" />
+          ) : (
+            "Sign in"
+          )}
+        </button>
+
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+          <span className="text-xs text-gray-500 font-medium">New to Bookshop?</span>
+          <Link href="/register" className="text-xs font-bold text-[#1B5E20] hover:underline">
+            Create Account
+          </Link>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+export default function LoginPage() {
+  const router = useRouter();
+
+  return (
     <div className="min-h-screen flex w-full">
       {/* Left Side - Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white relative overflow-hidden">
@@ -58,80 +141,9 @@ export default function LoginPage() {
           <span className="text-sm font-medium">Back</span>
         </button>
 
-        <div className="w-full max-w-md space-y-8 relative z-10">
-          <div className="text-center space-y-4">
-            <div className="relative w-20 h-20 mx-auto">
-               <Image src="/logo.png" alt="UNN Logo" fill className="object-contain" />
-            </div>
-            <div className="space-y-1">
-              <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
-              <p className="text-sm text-gray-500 font-medium">Sign in to your UNN Bookshop account</p>
-            </div>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-600 uppercase tracking-wide">
-                Email Address
-              </label>
-              <input
-                type="email"
-                placeholder="student@unn.edu.ng"
-                className="w-full px-4 py-3 bg-blue-50/50 border border-blue-100 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all placeholder:text-gray-400"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-600 uppercase tracking-wide">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••••"
-                  className="w-full px-4 py-3 bg-blue-50/50 border border-blue-100 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-600/20 focus:border-green-600 transition-all placeholder:text-gray-400"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-              <div className="flex justify-end">
-                <Link href="#" className="text-xs font-bold text-gray-500 hover:text-green-700">
-                  Forgot Password?
-                </Link>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-[#1B5E20] hover:bg-[#144a18] text-white font-bold py-3 rounded-lg transition-all transform active:scale-[0.98] flex items-center justify-center shadow-lg shadow-green-900/20"
-            >
-              {isLoading ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
-              ) : (
-                "Sign in"
-              )}
-            </button>
-
-            <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-              <span className="text-xs text-gray-500 font-medium">New to Bookshop?</span>
-              <Link href="/register" className="text-xs font-bold text-[#1B5E20] hover:underline">
-                Create Account
-              </Link>
-            </div>
-          </form>
-        </div>
+        <Suspense fallback={<div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
+          <LoginForm />
+        </Suspense>
       </div>
 
       {/* Right Side - Green Banner */}
